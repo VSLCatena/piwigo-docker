@@ -27,7 +27,7 @@ services:
       - piwigo-scripts:/usr/local/bin/scripts/
 
   piwigo.db:
-    image: docker.io/library/mariadb:${MARIADB_VERSION:-lts}
+    image: mariadb:${MARIADB_VERSION:-lts}
     hostname: db
     container_name: piwigo.db
     restart: always
