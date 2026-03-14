@@ -23,6 +23,7 @@ services:
       - TZ=${TZ:-Europe/Amsterdam}
     networks:
       - piwigo
+      - REVERSE_PROXY
     ports:
       - '${PROJECT_IP:-0.0.0.0}:${PROJECT_PORT:-80}:80'
     depends_on:
