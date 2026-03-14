@@ -12,7 +12,7 @@ services:
   piwigo:
     image: piwigo/piwigo:${PIWIGO_VERSION:-latest}
     hostname: piwigo
-    container_name: piwigo.db
+    container_name: piwigo
     restart: always
     environment:
       - TZ=${TZ:-Europe/Amsterdam}
