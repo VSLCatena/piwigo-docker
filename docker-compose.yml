@@ -1,0 +1,43 @@
+volumes:
+  piwigo:
+  piwigo-scripts:
+  db:
+
+networks:
+  piwigo:
+  REVERSE_PROXY:
+    external: true
+
+services:
+  piwigo:
+    image: piwigo/piwigo:${PIWIGO_VERSION:-latest}
+    hostname: piwigo
+    container_name: piwigo.db
+    restart: always
+    environment:
+      - TZ=${TZ:-Europe/Amsterdam}
+    networks:
+      - piwigo
+    ports:
+      - ${PIWIGO_PORT}:80
+    depends_on:
+      - piwigo.db
+    volumes:
+      - piwigo:/var/www/html/piwigo/
+      - piwigo-scripts:/usr/local/bin/scripts/
+
+  piwigo.db:
+    image: docker.io/library/mariadb:${MARIADB_VERSION:-lts}
+    hostname: db
+    container_name: piwigo.db
+    restart: always
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=${MARIADB_RANDOM_ROOT_PASSWORD:-true}
+      - MARIADB_USER=${MARIADB_USER:-piwigodb_user}
+      - MARIADB_DATABASE=${MARIADB_DATABASE:-piwigodb}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD} 
+      - TZ=${TZ:-Europe/Amsterdam}
+    networks:
+      - piwigo
+    volumes:
+      - db:/var/lib/mysql
