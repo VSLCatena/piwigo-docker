@@ -35,8 +35,6 @@ jobs:
       - name: Super-linter
         uses: super-linter/super-linter@v8.5.0 # x-release-please-version
         env:
-          FILTER_REGEX_INCLUDE: '^/'
-          FILTER_REGEX_EXCLUDE: '(^|/).github/'
           VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: "main"
           FIX_YAML_PRETTIER: true
