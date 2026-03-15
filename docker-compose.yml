@@ -1,10 +1,16 @@
 volumes:
-  piwigo:
-  piwigo-scripts:
+  data:
+  scripts:
   db:
 
 networks:
   piwigo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: '${PROJECT_SUBNET}'
+    driver_opts:
+      com.docker.network.bridge.name: piwigo_net
   REVERSE_PROXY:
     external: true
 
@@ -29,8 +35,8 @@ services:
     depends_on:
       - piwigo.db
     volumes:
-      - piwigo:/var/www/html/piwigo/
-      - piwigo-scripts:/usr/local/bin/scripts/
+      - data:/var/www/html/piwigo/
+      - scripts:/usr/local/bin/scripts/
 
   piwigo.db:
     image: mariadb:${MARIADB_VERSION:-lts}
