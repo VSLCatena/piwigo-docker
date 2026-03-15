@@ -21,6 +21,7 @@ services:
     container_name: piwigo
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=REVERSE_PROXY"
       - "traefik.http.routers.${PROJECT}.rule=Host(`${PROJECT_FQDN}`)"
       - "traefik.http.routers.${PROJECT}.entrypoints=${PROJECT_ENTRYPOINT}"
       - "traefik.http.routers.${PROJECT}.tls.certresolver=${PROJECT_CERT_RESOLVER}"
@@ -34,6 +35,8 @@ services:
       dockerfile: Dockerfile
       args:
         DEPLOY_ENV: "production"
+        PHP_VERSION: "84"
+        PIWIGO_VERSION: "16.3.0"
     environment:
       - TZ=${TZ:-Europe/Amsterdam}
     networks:
