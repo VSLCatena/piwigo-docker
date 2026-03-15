@@ -1,10 +1,16 @@
 volumes:
-  piwigo:
-  piwigo-scripts:
+  data:
+  scripts:
   db:
 
 networks:
   piwigo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: '${PROJECT_SUBNET}'
+    driver_opts:
+      com.docker.network.bridge.name: piwigo_net
   REVERSE_PROXY:
     external: true
 
@@ -15,10 +21,22 @@ services:
     container_name: piwigo
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=REVERSE_PROXY"
       - "traefik.http.routers.${PROJECT}.rule=Host(`${PROJECT_FQDN}`)"
       - "traefik.http.routers.${PROJECT}.entrypoints=${PROJECT_ENTRYPOINT}"
       - "traefik.http.routers.${PROJECT}.tls.certresolver=${PROJECT_CERT_RESOLVER}"
+      - "traefik.http.routers.${PROJECT}.tls.domains[0].main=${PROJECT_DOMAIN_MAIN}"
+      - "traefik.http.routers.${PROJECT}.tls.domains[0].sans=${PROJECT_DOMAIN_SANS}"
+      - "traefik.http.services.${PROJECT}.loadbalancer.server.port=80"
     restart: always
+    pull_policy: always
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+      args:
+        DEPLOY_ENV: "production"
+        PHP_VERSION: "84"
+        PIWIGO_VERSION: "${PIWIGO_VERSION}"
     environment:
       - TZ=${TZ:-Europe/Amsterdam}
     networks:
@@ -29,8 +47,8 @@ services:
     depends_on:
       - piwigo.db
     volumes:
-      - piwigo:/var/www/html/piwigo/
-      - piwigo-scripts:/usr/local/bin/scripts/
+      - data:/var/www/html/piwigo/
+      - scripts:/usr/local/bin/scripts/
 
   piwigo.db:
     image: mariadb:${MARIADB_VERSION:-lts}

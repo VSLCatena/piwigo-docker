@@ -1,3 +1,4 @@
+[![Lint Code Base](https://github.com/VSLCatena/piwigo-docker/actions/workflows/linter.yml/badge.svg)](https://github.com/VSLCatena/piwigo-docker/actions/workflows/linter.yml)
 # Piwigo docker
 
 An alpine based container to easily deploy piwigo !
