@@ -36,7 +36,7 @@ services:
       args:
         DEPLOY_ENV: "production"
         PHP_VERSION: "84"
-        PIWIGO_VERSION: "16.3.0"
+        PIWIGO_VERSION: "${PIWIGO_VERSION}"
     environment:
       - TZ=${TZ:-Europe/Amsterdam}
     networks:
