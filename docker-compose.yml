@@ -1,7 +1,7 @@
 volumes:
   data:
     driver_opts:
-      o: "size=${PROJECT_VOLUME_DATA_SIZE:-128g}"
+      o: 'size=${DATA_VOLUME_MAX_SIZE}'
   scripts:
   db:
 
